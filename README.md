@@ -6,6 +6,15 @@
 
 ---
 
+## Thông tin sinh viên
+- **Họ và tên:** Đỗ Việt Anh
+- **MSSV:** 2A202603973
+- **Lớp:** K5-L3B
+- **Bài nộp:** Guardrails, HITL & Responsible AI (Day 11)
+- **Tên Repo:** `K5-L3B-DAY11-DoVietAnh-2A202603973-Guardrails-HITL-Responsible-AI`
+
+---
+
 ## Thời lượng
 
 | Phần | Thời gian |

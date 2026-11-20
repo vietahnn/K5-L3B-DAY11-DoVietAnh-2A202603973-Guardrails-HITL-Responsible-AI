@@ -62,14 +62,30 @@ class OpenAIRunner:
             return block_msg
 
         client = self._client()
-        completion = client.chat.completions.create(
-            model=self.model,
-            messages=[
+        call_kwargs = {
+            "model": self.model,
+            "messages": [
                 {"role": "system", "content": agent.instruction},
                 {"role": "user", "content": user_message},
             ],
-            temperature=self.temperature,
-        )
+        }
+        if self.temperature is not None:
+            call_kwargs["temperature"] = self.temperature
+
+        try:
+            completion = client.chat.completions.create(**call_kwargs)
+        except Exception as exc:
+            # Một số model reasoning / harder models (như gpt-5.6-luna / o1) chỉ chấp nhận temperature mặc định (= 1)
+            if "temperature" in str(exc).lower():
+                call_kwargs["temperature"] = 1.0
+                try:
+                    completion = client.chat.completions.create(**call_kwargs)
+                except Exception:
+                    call_kwargs.pop("temperature", None)
+                    completion = client.chat.completions.create(**call_kwargs)
+            else:
+                raise
+
         text = (completion.choices[0].message.content or "").strip()
 
         for hook in self.output_hooks:
